@@ -59,7 +59,7 @@ class SUMO_ENV:
             Methods.Traditional_R3: self.Traditional_RL_Methode_R3,
             }
         for i, methode in enumerate(switch_dict.keys()):
-            if i != 0: break
+            #if i != 0: break
             self.Starting()
             self.intersections = trafficlight.getIDList()
             case_function = switch_dict.get(methode, self.Default_Case)
