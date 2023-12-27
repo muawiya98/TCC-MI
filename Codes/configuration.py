@@ -1,9 +1,12 @@
 from enum import Enum
-
+import os
 # ================= Simulation Settings =================
 # Network_Path = "Networks\\environment 3.3\\environment.sumocfg"
+# Network_Path = os.path.join(os.path.abspath("."), "Networks", "environment 3.3", "environment.sumocfg")
 # Network_Path = "Networks\\environment 2.2\\environment.sumocfg"
-Network_Path = "Networks\\environment 1.1\\environment.sumocfg"
+# Network_Path = os.path.join(os.path.abspath("."), "Networks", "environment 2.2", "environment.sumocfg")
+# Network_Path = "Networks\\environment 1.1\\environment.sumocfg"
+Network_Path = os.path.join(os.path.abspath("."),"Networks", "environment 1.1", "environment.sumocfg")
 
 Simulation_Time = 720000 # 45000 # 144000 # 
 
