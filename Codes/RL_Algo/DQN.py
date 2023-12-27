@@ -25,7 +25,7 @@ class DQN(RLAlgorithm):
         for n in self.neurons_num_list:
             model.add(Dense(n, activation=LeakyReLU(alpha=0.01)))
         model.add(Dense(NUMBER_OF_ACTION, activation="sigmoid", name="Actions"))
-        model.compile(loss='mse', optimizer=Adam(learning_rate=self.lr, decay=self.decay))
+        model.compile(loss='mse', optimizer=Adam(learning_rate=self.lr)
         return model
     def replay(self, memory, callbacks_list, model_info_path, model_name):
         x_batch, y_batch = [], []
