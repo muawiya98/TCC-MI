@@ -1,4 +1,4 @@
-from Codes.configuration import episode_time, traffic_light_period
+from Codes.configuration import episode_time, traffic_light_period, Result_Path
 import pandas as pd
 import numpy as np
 import os
@@ -42,7 +42,7 @@ class ResultsHistory:
             df['Reward'] = self.reward_history_per_episode[key]
             df['Waiting Time'] = self.waiting_time_history_per_episode[key]
             df['Density'] = self.density_history_per_episode[key]
-            save_path = os.path.join(os.path.abspath("."), str(methode_name) + ' Results')
+            save_path = os.path.join(Result_Path, str(methode_name) + ' Results')
             os.makedirs(save_path, exist_ok=True)
             df.to_csv(os.path.join(save_path, "Numerical Results Per Episode " + key + ".csv"), index=False)
 
@@ -53,7 +53,7 @@ class ResultsHistory:
             df['Reward'] = self.reward_history[key]
             df['Waiting Time'] = self.waiting_time_history[key]
             df['Density'] = self.density_history[key]
-            save_path = os.path.join(os.path.abspath("."), str(methode_name) + ' Results')
+            save_path = os.path.join(Result_Path, str(methode_name) + ' Results')
             os.makedirs(save_path, exist_ok=True)
             df.to_csv(os.path.join(save_path, "Numerical Results Per Step " + key + ".csv"), index=False)
 

@@ -1,5 +1,5 @@
 from Codes.configuration import Network_Path, Methods, traffic_light_period, \
-    generation_period, episode_time, Simulation_Time, TEST_STAGE
+    generation_period, episode_time, Simulation_Time, TEST_STAGE, Result_Path
 from Codes.TrafficLightController.TrafficLightsControler import TrafficLightsController
 from keras.callbacks import ModelCheckpoint, EarlyStopping, CSVLogger, Callback
 from Codes.ObjectsController.SumoController import SumoObjectController
@@ -74,7 +74,7 @@ class Controller:
 
     def Make_Callbacks(self, method_name, Agent_id):
         model_name = str(method_name) + "_model" + Agent_id
-        save_path = os.path.join(os.path.abspath("."), str(method_name)+' Results')
+        save_path = os.path.join(Result_Path, str(method_name)+' Results')
         os.makedirs(save_path, exist_ok=True)
         filepath = os.path.join(save_path, model_name + '.best.hdf5')
         history_logger = CSVLogger(os.path.join(save_path, model_name + '_history.csv'), separator=",", append=True)
@@ -101,7 +101,7 @@ class Controller:
         self.Save_Actions_For_Edge()
 
     def Run(self, methode_name):
-
+        os.makedirs(Result_Path, exist_ok=True)
         step_generation, step, sub_episode_number, episode_number = 0, 0, 0, 0
         print(methode_name)
         callbacks_lists, model_info_paths, model_names = self.Create_Agents(methode_name)

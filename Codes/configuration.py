@@ -6,11 +6,13 @@ import os
 # Network_Path = "Networks\\environment 2.2\\environment.sumocfg"
 # Network_Path = os.path.join(os.path.abspath("."), "Networks", "environment 2.2", "environment.sumocfg")
 # Network_Path = "Networks\\environment 1.1\\environment.sumocfg"
-Network_Path = os.path.join(os.path.abspath("."),"Networks", "environment 1.1", "environment.sumocfg")
+Network_Path = os.path.join(os.path.abspath("."), "Networks", "environment 1.1", "environment.sumocfg")
 
-Simulation_Time = 720000 # 45000 # 144000 # 
+Simulation_Time = 45000 # 144000 # 720000
 
 TEST_STAGE = 90
+
+Result_Path = os.path.join(os.path.abspath("."), "Results")
 
 # ================= Traffic Light Settings =================
 traffic_light_period = 30
@@ -20,7 +22,7 @@ Yellow_period = 5
 Green_red_period = 25
 
 # ================= Object Settings =================
-generation_period = 450 # 30 # 90 # 
+generation_period = 30 # 90 # 450
 
 Vehicle_characteristics = {
     'length': 3,
@@ -32,7 +34,7 @@ HIGH_NUMBER_OF_VEHICLE = 10
 LOW_NUMBER_OF_VEHICLE = 2
 
 # ================= RL Settings =================
-episode_time = 7200 # 450 # 1440 # 
+episode_time = 450 # 1440 # 7200
 
 NUMBER_OF_ACTION = 6
 

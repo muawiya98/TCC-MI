@@ -1,6 +1,6 @@
 from Codes.Visualization.KalmanVisualization import KalmanVisualization
 from Codes.Visualization.ResultsVisualization import ResultsVisualization
-from Codes.configuration import Methods
+from Codes.configuration import Methods, Result_Path
 import pandas as pd
 import numpy as np
 import pickle
@@ -33,7 +33,7 @@ class Results:
         return rmse
     def Kalman_Results(self, methode_name, methods_names = ['Ground Truth', 'Kalman Filter', 'Measurement',
                                                             'Smooth Kalman Filter', 'Particle Filter', 'Smooth Particle Filter']):
-        save_path = os.path.join(os.path.abspath("."), str(methode_name)+' Results')
+        save_path = os.path.join(Result_Path, str(methode_name)+' Results')
         os.makedirs(save_path, exist_ok=True)
         results = self.graph.models_history.get_history()
         Kalman_rmse, Measurement_rmse, Edge, Kalman_Smooth_rmse, Particle_Filter, \
@@ -92,7 +92,7 @@ class Results:
         RMSE_df.to_csv(os.path.join(save_path, "RMSE.csv"), index=False)
 
     def RL_Results(self, methode_name):
-        save_path = os.path.join(os.path.abspath("."), str(methode_name)+' Results')
+        save_path = os.path.join(Result_Path, str(methode_name)+' Results')
         os.makedirs(save_path, exist_ok=True)
         junction_ids = list(self.graph.results_history.accumulative_reward_history.keys())
         for junction_id in junction_ids:

@@ -20,7 +20,7 @@ class SUMO_ENV:
         return options
     def Starting(self):
         if self.get_Options().nogui:sumoBinary = checkBinary('sumo')
-        else: sumoBinary = checkBinary('sumo') # -gui
+        else: sumoBinary = checkBinary('sumo-gui')
         start([sumoBinary, "-c", Network_Path])
     def exit(self):
         traci.close()

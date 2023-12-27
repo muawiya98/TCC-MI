@@ -1,3 +1,4 @@
+from Codes.configuration import Result_Path
 from matplotlib.ticker import MaxNLocator
 import matplotlib.pyplot as plt
 import matplotlib.ticker as ticker
@@ -23,7 +24,7 @@ class ResultsVisualization:
         ax.xaxis.set_minor_locator(ticker.AutoMinorLocator())
         plt.xticks(rotation=45, fontsize='xx-small')
         plt.grid()
-        save_path = os.path.join(os.path.abspath("."), name_folder)
+        save_path = os.path.join(Result_Path, name_folder)
         os.makedirs(save_path, exist_ok=True)
 
         ax.xaxis.set_major_locator(MaxNLocator(integer=True))  # Example adjustment for x-axis
