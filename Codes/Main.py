@@ -50,13 +50,13 @@ class SUMO_ENV:
         print("Error running method")
     def Run_Methodes(self):
         switch_dict = {
-            Methods.Random: self.Random_Methode,
             Methods.Kalman_R1: self.Kalman_Methode_R1,
             Methods.Kalman_R2: self.Kalman_Methode_R2,
             Methods.Kalman_R3: self.Kalman_Methode_R3,
             Methods.Traditional_R1: self.Traditional_RL_Methode_R1,
             Methods.Traditional_R2: self.Traditional_RL_Methode_R2,
             Methods.Traditional_R3: self.Traditional_RL_Methode_R3,
+            # Methods.Random: self.Random_Methode, Done
             }
         for i, methode in enumerate(switch_dict.keys()):
             #if i != 0: break
