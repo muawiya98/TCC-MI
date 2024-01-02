@@ -52,13 +52,13 @@ class SUMO_ENV:
     def Run_Methodes(self):
         os.makedirs(Result_Path, exist_ok=True)
         switch_dict = {
-            Methods.Random: self.Random_Methode,
             Methods.Kalman_R1: self.Kalman_Methode_R1,
             Methods.Kalman_R2: self.Kalman_Methode_R2,
             Methods.Kalman_R3: self.Kalman_Methode_R3,
             Methods.Traditional_R1: self.Traditional_RL_Methode_R1,
             Methods.Traditional_R2: self.Traditional_RL_Methode_R2,
             Methods.Traditional_R3: self.Traditional_RL_Methode_R3,
+            # Methods.Random: self.Random_Methode,
             }
         methode_list = list(switch_dict.keys())
         methode_name = methode_list[0]
