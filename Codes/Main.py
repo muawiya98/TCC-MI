@@ -16,7 +16,7 @@ class SUMO_ENV:
     def get_Options(self):
         opt_parser = optparse.OptionParser()
         opt_parser.add_option("--nogui", action="store_true",
-                            default=False, help="run the commandline version of sumo")
+                            default=True, help="run the commandline version of sumo")
         options, _ = opt_parser.parse_args()
         return options
     def Starting(self):
@@ -63,7 +63,7 @@ class SUMO_ENV:
         methode_list = list(switch_dict.keys())
         methode_name = methode_list[0]
         if os.path.exists(os.path.join(Result_Path, "methode.pkl")):
-            methode_name = load_object("methode.pkl", Result_Path)
+            methode_name = load_object("methode", Result_Path)
         for i, methode in enumerate(methode_list[methode_list.index(methode_name):]):
             self.is_Resumption = True if i==0 else False
             save_object(methode, "methode", Result_Path)

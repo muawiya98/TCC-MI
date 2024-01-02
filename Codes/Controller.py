@@ -30,14 +30,14 @@ class Controller:
         self.Agent_ids = intersection
         self.is_Resumption = is_Resumption
         if self.is_Resumption and os.path.exists(os.path.join(Result_Path, "graph.pkl")):
-            self.graph = load_object("graph.pkl", Result_Path)
-            self.information = load_object("information.pkl", Result_Path)
+            self.graph = load_object("graph", Result_Path)
+            self.information = load_object("information", Result_Path)
         else:
             self.graph = Graph(intersection)
             self.information = Infromation(self.Agent_ids)
         self.results = Results(self.graph)
         self.SumoObject = SumoObjectController(self.graph.incomming_edges, self.graph.outcomming_edges)
-        self.reward = Reward(self.information, self.graph, self.Agent_ids, self.is_Resumption)
+        self.reward = Reward(self.information, self.graph, self.Agent_ids)
         self.Agents = []
     def Create_Agents(self, method_name):
         callbacks_lists, model_info_paths, model_names = [], [], []
@@ -49,13 +49,13 @@ class Controller:
             model_names.append(model_name)
         if self.is_Resumption:
             if os.path.exists(os.path.join(Result_Path, "callbacks_lists.pkl")):
-                callbacks_lists = load_object("callbacks_lists.pkl", Result_Path)
+                callbacks_lists = load_object("callbacks_lists", Result_Path)
             if os.path.exists(os.path.join(Result_Path, "model_info_paths.pkl")):
-                model_info_paths = load_object("model_info_paths.pkl", Result_Path)
+                model_info_paths = load_object("model_info_paths", Result_Path)
             if os.path.exists(os.path.join(Result_Path, "model_names.pkl")):
-                model_names = load_object("model_names.pkl", Result_Path)
+                model_names = load_object("model_names", Result_Path)
             if os.path.exists(os.path.join(Result_Path, "Agents.pkl")):
-                self.Agents = load_object("Agents.pkl", Result_Path)
+                self.Agents = load_object("Agents", Result_Path)
         return callbacks_lists, model_info_paths, model_names
 
     def Save_Start_State(self):
@@ -119,9 +119,9 @@ class Controller:
         step_generation, step, sub_episode_number, episode_number = 0, 0, 0, 0
         saved_sub_episode_number, saved_episode_number = 0, 0
         if self.is_Resumption and os.path.exists(os.path.join(Result_Path, "sub_episode_number.pkl")):
-            saved_sub_episode_number = load_object("sub_episode_number.pkl", Result_Path)
+            saved_sub_episode_number = load_object("sub_episode_number", Result_Path)
         if self.is_Resumption and os.path.exists(os.path.join(Result_Path, "episode_number.pkl")):
-            saved_episode_number = load_object("episode_number.pkl", Result_Path)
+            saved_episode_number = load_object("episode_number", Result_Path)
         print(methode_name)
         callbacks_lists, model_info_paths, model_names = self.Create_Agents(methode_name)
         Scenario_Type = "train"
@@ -146,12 +146,12 @@ class Controller:
             step_generation += 1
             step += 1
             if episode_number%5==0:
-                save_object(episode_number, "episode_number.pkl", Result_Path)
-                save_object(sub_episode_number, "sub_episode_number.pkl", Result_Path)
-                save_object(self.Agents, "Agents.pkl", Result_Path)
-                save_object(callbacks_lists, "callbacks_lists.pkl", Result_Path)
-                save_object(model_info_paths, "model_info_paths.pkl", Result_Path)
-                save_object(model_names, "model_names.pkl", Result_Path)
+                save_object(episode_number, "episode_number", Result_Path)
+                save_object(sub_episode_number, "sub_episode_number", Result_Path)
+                save_object(self.Agents, "Agents", Result_Path)
+                save_object(callbacks_lists, "callbacks_lists", Result_Path)
+                save_object(model_info_paths, "model_info_paths", Result_Path)
+                save_object(model_names, "model_names", Result_Path)
                 save_object(self.graph, "graph.pkl", Result_Path)
-                save_object(self.information, "information.pkl", Result_Path)
+                save_object(self.information, "information", Result_Path)
         self.results.Prepare_All_Results(methode_name)

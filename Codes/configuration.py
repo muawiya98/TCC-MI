@@ -14,7 +14,7 @@ Simulation_Time = 720000 # 45000 # 144000 #
 TEST_STAGE = 90
 
 # Result_Path = os.path.join(os.path.abspath("."), "Results")
-Result_Path = '/content/drive/MyDrive/Colab_Notebooks/Muawiya/TCC-MI/Results'
+Result_Path = '/content/drive/MyDrive/Colab_Notebooks/Muawiya/TCC_MI/Results'
 
 
 # ================= Traffic Light Settings =================
