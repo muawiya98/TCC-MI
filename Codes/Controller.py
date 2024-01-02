@@ -98,7 +98,7 @@ class Controller:
         return callbacks_list, save_path, model_name
 
     def Communication_With_Environment(self, method_name, step, callbacks_lists, model_info_paths,
-                                       model_names, Scenario_Type, episode_resumption, sub_episode_resumption):
+                                       model_names, Scenario_Type, saved_episode_number, episode_number):
         Actions_dic = {}
         for i, Agent_id in enumerate(self.Agent_ids):
             if method_name is Methods.Random:
@@ -106,9 +106,10 @@ class Controller:
                 Actions_dic[Agent_id] = action
                 self.reward.Reward_Function(Agent_id, step)
             else:
-                if episode_resumption and sub_episode_resumption:
-                    Actions_dic[Agent_id] = self.Agents[i].get_action(method_name, step, callbacks_lists[i],
-                                                                      model_info_paths[i], model_names[i], Scenario_Type)
+                if saved_episode_number<=episode_number:
+                    # Actions_dic[Agent_id] = self.Agents[i].get_action(method_name, step, callbacks_lists[i],model_info_paths[i], model_names[i], Scenario_Type)
+                    action = random.choice([1, 2, 3, 4, 5, 6])
+                    Actions_dic[Agent_id] = action
                 else:
                     action = random.choice([1, 2, 3, 4, 5, 6])
                     Actions_dic[Agent_id] = action
@@ -132,8 +133,7 @@ class Controller:
             if step % traffic_light_period == 0:
                 self.Communication_With_Environment(methode_name, step, callbacks_lists,
                                                     model_info_paths, model_names, Scenario_Type,
-                                                    saved_episode_number==episode_number,
-                                                    saved_sub_episode_number==sub_episode_number)
+                                                    saved_episode_number, episode_number)
             if step_generation % generation_period == 0:
                 self.SumoObject.generate_object(sub_episode_number)
                 sub_episode_number += 1
@@ -145,7 +145,7 @@ class Controller:
                 self.Rest_Sumo()
             step_generation += 1
             step += 1
-            if episode_number%5==0:
+            if episode_number%5==0 and episode_number!=0:
                 save_object(episode_number, "episode_number", Result_Path)
                 save_object(sub_episode_number, "sub_episode_number", Result_Path)
                 save_object(callbacks_lists, "callbacks_lists", Result_Path)

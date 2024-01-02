@@ -1,9 +1,9 @@
 from Codes.configuration import NUMBER_OF_ACTION
 from Codes.RL_Algo.RLAlgorithm import RLAlgorithm
 from keras.layers import Dense, Input, LeakyReLU
-from keras.models import Sequential, load_model
-from keras.models import load_model as ldm
-from keras.models import save_model as sdm
+from keras.models import Sequential #, load_model
+# from keras.models import load_model as ldm
+# from keras.models import save_model as sdm
 from keras.optimizers import Adam
 import numpy as np
 import random
@@ -35,8 +35,7 @@ class DQN(RLAlgorithm):
             y_target[0][0] = reward + self.gamma * self.Q_next(next_state)[0]
             x_batch.append(state.reshape(-1, state.size))
             y_batch.append(y_target[0].reshape(-1, y_target[0].size))
-        self.model.fit(np.squeeze(x_batch), np.squeeze(y_batch), epochs=25, batch_size=len(x_batch), validation_split=0.20,
-                       callbacks=callbacks_list, verbose=0)
+        self.model.fit(np.squeeze(x_batch), np.squeeze(y_batch), epochs=25, batch_size=len(x_batch), validation_split=0.20,callbacks=callbacks_list, verbose=0)
         self.model.save(os.path.join(model_info_path, model_name + ".h5"))
         self.epsilon = max(self.epsilon * self.decay, self.min_epsilon)
     def Q_next(self, state):
@@ -53,25 +52,26 @@ class DQN(RLAlgorithm):
         return x
     def value_function(self, state):
         return np.argmax(self.pred(state)[0])+1
-    def save(self, path=".",file_name=None, *args):
-        if os.path.isdir(path):
-            if not path.endswith("rl_models"):
-                models_path = os.path.join(path, "rl_models")
-                if not os.path.isdir(models_path):os.mkdir(models_path)
-            else:models_path = path
-            if file_name:self.model.save_weights(os.path.join(models_path,file_name),*args)
-            else:self.model.save_weights(os.path.join(models_path,"DQN"),*args)
-        self.model.save_weights(path,*args)
-    def save_model(self,path=".", file_name=None, *args):
-        if os.path.isdir(path):
-            if not path.endswith("rl_models"):
-                models_path = os.path.join(path,"rl_models")
-                if not os.path.isdir(models_path):os.mkdir(models_path)
-            else:models_path = path
-            if file_name:sdm(self.model, os.path.join(models_path,file_name),*args)
-            else:sdm(self.model, os.path.join(models_path,"DQN.h5"),*args)
-        sdm(self.model, path, *args)
-    def load(self, path, *args):
-        self.model.load_weights(path,*args)
-    def load_model(self, path, *args):
-        self.model = ldm(path, *args)
+    
+    # def save(self, path=".",file_name=None, *args):
+    #     if os.path.isdir(path):
+    #         if not path.endswith("rl_models"):
+    #             models_path = os.path.join(path, "rl_models")
+    #             if not os.path.isdir(models_path):os.mkdir(models_path)
+    #         else:models_path = path
+    #         if file_name:self.model.save_weights(os.path.join(models_path,file_name),*args)
+    #         else:self.model.save_weights(os.path.join(models_path,"DQN"),*args)
+    #     self.model.save_weights(path,*args)
+    # def save_model(self,path=".", file_name=None, *args):
+    #     if os.path.isdir(path):
+    #         if not path.endswith("rl_models"):
+    #             models_path = os.path.join(path,"rl_models")
+    #             if not os.path.isdir(models_path):os.mkdir(models_path)
+    #         else:models_path = path
+    #         if file_name:sdm(self.model, os.path.join(models_path,file_name),*args)
+    #         else:sdm(self.model, os.path.join(models_path,"DQN.h5"),*args)
+    #     sdm(self.model, path, *args)
+    # def load(self, path, *args):
+    #     self.model.load_weights(path,*args)
+    # def load_model(self, path, *args):
+    #     self.model = ldm(path, *args)
