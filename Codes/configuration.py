@@ -1,4 +1,5 @@
 from enum import Enum
+import pickle
 import os
 # ================= Simulation Settings =================
 # Network_Path = "Networks\\environment 3.3\\environment.sumocfg"
@@ -12,7 +13,9 @@ Simulation_Time = 720000 # 45000 # 144000 #
 
 TEST_STAGE = 90
 
-Result_Path = os.path.join(os.path.abspath("."), "Results")
+# Result_Path = os.path.join(os.path.abspath("."), "Results")
+Result_Path = '/content/drive/MyDrive/Colab_Notebooks/Muawiya/TCC-MI/Results'
+
 
 # ================= Traffic Light Settings =================
 traffic_light_period = 30
@@ -61,3 +64,16 @@ class Methods(Enum):
     Traditional_R1 = 'Traditional RL R1'
     Traditional_R2 = 'Traditional RL R2'
     Traditional_R3 = 'Traditional RL R3'
+
+# ================= Shared Functions =================
+def save_object(obj, filename, path):
+    filename = os.path.join(path, filename)
+    with open(filename + ".pkl", 'wb') as outp:
+        pickle.dump(obj, outp, pickle.HIGHEST_PROTOCOL)
+    outp.close()
+def load_object(filename, path):
+    filename = os.path.join(path, filename)
+    with open(filename + ".pkl", 'rb') as outp:
+        loaded_object = pickle.load(outp)
+    outp.close()
+    return loaded_object

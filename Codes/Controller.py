@@ -1,5 +1,5 @@
 from Codes.configuration import Network_Path, Methods, traffic_light_period, \
-    generation_period, episode_time, Simulation_Time, TEST_STAGE, Result_Path
+    generation_period, episode_time, Simulation_Time, TEST_STAGE, Result_Path, save_object, load_object
 from Codes.TrafficLightController.TrafficLightsControler import TrafficLightsController
 from keras.callbacks import ModelCheckpoint, EarlyStopping, CSVLogger, Callback
 from Codes.ObjectsController.SumoController import SumoObjectController
@@ -24,15 +24,20 @@ class GarbageCollectorCallback(Callback):
         gc.collect()
 
 class Controller:
-    def __init__(self, intersection):
+    def __init__(self, intersection, is_Resumption):
         self.number_of_agent = len(intersection)
         self.tls_controller = TrafficLightsController(intersection)
         self.Agent_ids = intersection
-        self.graph = Graph(intersection)
+        self.is_Resumption = is_Resumption
+        if self.is_Resumption and os.path.exists(os.path.join(Result_Path, "graph.pkl")):
+            self.graph = load_object("graph.pkl", Result_Path)
+            self.information = load_object("information.pkl", Result_Path)
+        else:
+            self.graph = Graph(intersection)
+            self.information = Infromation(self.Agent_ids)
         self.results = Results(self.graph)
         self.SumoObject = SumoObjectController(self.graph.incomming_edges, self.graph.outcomming_edges)
-        self.information = Infromation(self.Agent_ids)
-        self.reward = Reward(self.information, self.graph, self.Agent_ids)
+        self.reward = Reward(self.information, self.graph, self.Agent_ids, self.is_Resumption)
         self.Agents = []
     def Create_Agents(self, method_name):
         callbacks_lists, model_info_paths, model_names = [], [], []
@@ -42,6 +47,15 @@ class Controller:
             callbacks_lists.append(callbacks_list)
             model_info_paths.append(model_info_path)
             model_names.append(model_name)
+        if self.is_Resumption:
+            if os.path.exists(os.path.join(Result_Path, "callbacks_lists.pkl")):
+                callbacks_lists = load_object("callbacks_lists.pkl", Result_Path)
+            if os.path.exists(os.path.join(Result_Path, "model_info_paths.pkl")):
+                model_info_paths = load_object("model_info_paths.pkl", Result_Path)
+            if os.path.exists(os.path.join(Result_Path, "model_names.pkl")):
+                model_names = load_object("model_names.pkl", Result_Path)
+            if os.path.exists(os.path.join(Result_Path, "Agents.pkl")):
+                self.Agents = load_object("Agents.pkl", Result_Path)
         return callbacks_lists, model_info_paths, model_names
 
     def Save_Start_State(self):
@@ -83,7 +97,8 @@ class Controller:
         callbacks_list = [GarbageCollectorCallback(), checkpoint, es, history_logger]
         return callbacks_list, save_path, model_name
 
-    def Communication_With_Environment(self, method_name, step, callbacks_lists, model_info_paths, model_names, Scenario_Type):
+    def Communication_With_Environment(self, method_name, step, callbacks_lists, model_info_paths,
+                                       model_names, Scenario_Type, episode_resumption, sub_episode_resumption):
         Actions_dic = {}
         for i, Agent_id in enumerate(self.Agent_ids):
             if method_name is Methods.Random:
@@ -91,18 +106,22 @@ class Controller:
                 Actions_dic[Agent_id] = action
                 self.reward.Reward_Function(Agent_id, step)
             else:
-                # if Agent_id == 'J0':
-                Actions_dic[Agent_id] = self.Agents[i].get_action(method_name, step, callbacks_lists[i],
-                                                                  model_info_paths[i], model_names[i], Scenario_Type)
-                # else:
-                #     action = random.choice([1, 2, 3, 4, 5, 6])
-                #     Actions_dic[Agent_id] = action
+                if episode_resumption and sub_episode_resumption:
+                    Actions_dic[Agent_id] = self.Agents[i].get_action(method_name, step, callbacks_lists[i],
+                                                                      model_info_paths[i], model_names[i], Scenario_Type)
+                else:
+                    action = random.choice([1, 2, 3, 4, 5, 6])
+                    Actions_dic[Agent_id] = action
         self.Maping_Between_agents_junctions(Actions_dic)
         self.Save_Actions_For_Edge()
 
     def Run(self, methode_name):
-        os.makedirs(Result_Path, exist_ok=True)
         step_generation, step, sub_episode_number, episode_number = 0, 0, 0, 0
+        saved_sub_episode_number, saved_episode_number = 0, 0
+        if self.is_Resumption and os.path.exists(os.path.join(Result_Path, "sub_episode_number.pkl")):
+            saved_sub_episode_number = load_object("sub_episode_number.pkl", Result_Path)
+        if self.is_Resumption and os.path.exists(os.path.join(Result_Path, "episode_number.pkl")):
+            saved_episode_number = load_object("episode_number.pkl", Result_Path)
         print(methode_name)
         callbacks_lists, model_info_paths, model_names = self.Create_Agents(methode_name)
         Scenario_Type = "train"
@@ -110,15 +129,29 @@ class Controller:
             traci.simulationStep()
             if episode_number>=TEST_STAGE:Scenario_Type = "test"
             if step == 0: self.Save_Start_State()
-            if step % traffic_light_period == 0: self.Communication_With_Environment(methode_name, step, callbacks_lists, model_info_paths, model_names, Scenario_Type)
+            if step % traffic_light_period == 0:
+                self.Communication_With_Environment(methode_name, step, callbacks_lists,
+                                                    model_info_paths, model_names, Scenario_Type,
+                                                    saved_episode_number==episode_number,
+                                                    saved_sub_episode_number==sub_episode_number)
             if step_generation % generation_period == 0:
                 self.SumoObject.generate_object(sub_episode_number)
                 sub_episode_number += 1
                 step_generation = 0
+
             if (step+generation_period) % episode_time == 0 and step != 0:
                 sub_episode_number = 0
                 episode_number += 1
                 self.Rest_Sumo()
             step_generation += 1
             step += 1
+            if episode_number%5==0:
+                save_object(episode_number, "episode_number.pkl", Result_Path)
+                save_object(sub_episode_number, "sub_episode_number.pkl", Result_Path)
+                save_object(self.Agents, "Agents.pkl", Result_Path)
+                save_object(callbacks_lists, "callbacks_lists.pkl", Result_Path)
+                save_object(model_info_paths, "model_info_paths.pkl", Result_Path)
+                save_object(model_names, "model_names.pkl", Result_Path)
+                save_object(self.graph, "graph.pkl", Result_Path)
+                save_object(self.information, "information.pkl", Result_Path)
         self.results.Prepare_All_Results(methode_name)

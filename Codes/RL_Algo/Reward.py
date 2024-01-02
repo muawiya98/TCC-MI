@@ -2,13 +2,14 @@ from Codes.configuration import traffic_light_period, WINDOW_SIZE, \
     episode_time, W_Short_term
 import numpy as np
 class Reward:
-    def __init__(self, information, graph, Agent_ids):
+    def __init__(self, information, graph, Agent_ids, is_Resumption):
+        self.is_Resumption = is_Resumption
         self.information = information
         self.graph = graph
         self.previous_waiting_time = {key: 0 for key in Agent_ids}
 
     def Short_Term_Reward(self, Agent_id, vehicles=None):
-        p_waiting_time = self.previous_waiting_time[Agent_id]
+        p_waiting_time = self.previous_waiting_time[Agent_id] if not self.is_Resumption else self.graph.results_history.waiting_time_history[Agent_id][-1]
         waiting_time = self.information.Average_Waiting_Time_Vehicles(Agent_id, vehicles)
         reward = p_waiting_time - waiting_time
         self.previous_waiting_time[Agent_id] = waiting_time
