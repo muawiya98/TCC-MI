@@ -9,6 +9,7 @@ class ResultsHistory:
         self.accumulative_reward_history = {}
         self.waiting_time_history = {}
         self.action_history = {}
+        self.action_per_step = {}
         self.reward_history = {}
         self.density_history = {}
         self.accumulative_reward_history_per_episode = {}
