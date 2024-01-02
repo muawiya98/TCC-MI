@@ -148,10 +148,10 @@ class Controller:
             if episode_number%5==0:
                 save_object(episode_number, "episode_number", Result_Path)
                 save_object(sub_episode_number, "sub_episode_number", Result_Path)
-                save_object(self.Agents, "Agents", Result_Path)
                 save_object(callbacks_lists, "callbacks_lists", Result_Path)
                 save_object(model_info_paths, "model_info_paths", Result_Path)
                 save_object(model_names, "model_names", Result_Path)
-                save_object(self.graph, "graph.pkl", Result_Path)
+                save_object(self.graph, "graph", Result_Path)
                 save_object(self.information, "information", Result_Path)
+                save_object(self.Agents, "Agents", Result_Path)
         self.results.Prepare_All_Results(methode_name)

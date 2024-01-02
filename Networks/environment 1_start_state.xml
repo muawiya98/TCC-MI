@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- generated on 2023-12-26 14:55:55 by Eclipse SUMO GUI Version 1.14.1
+<!-- generated on 2024-01-02 13:01:47 by Eclipse SUMO sumo Version 1.14.1
 <configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/sumoConfiguration.xsd">
 
     <input>
-        <net-file value="Networks\environment%201.1\environment.net.xml"/>
+        <net-file value="E:\Tasks\08_Traffic%20Congestion%20Control%20with%20kalman%20filter%20and%20graph%20state%20and%20GCN\TCC-MI\Networks\environment%201.1\environment.net.xml"/>
     </input>
 
     <traci_server>
-        <remote-port value="55633"/>
+        <remote-port value="61325"/>
     </traci_server>
 
     <gui_only>
-        <gui-settings-file value="Networks\environment%201.1\Custom_Veiw.xml"/>
+        <gui-settings-file value="E:\Tasks\08_Traffic%20Congestion%20Control%20with%20kalman%20filter%20and%20graph%20state%20and%20GCN\TCC-MI\Networks\environment%201.1\Custom_Veiw.xml"/>
         <quit-on-end value="true"/>
         <start value="true"/>
     </gui_only>
