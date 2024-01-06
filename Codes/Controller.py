@@ -123,22 +123,22 @@ class Controller:
         self.Maping_Between_agents_junctions(Actions_dic)
         self.Save_Actions_For_Edge()
 
-    def Run(self, methode_name):
+    def Run(self, method_name):
         step_generation, step, sub_episode_number, episode_number, step_number = 0, 0, 0, 0, 0
         saved_sub_episode_number, saved_episode_number = 0, 0
         if self.is_Resumption and os.path.exists(os.path.join(Result_Path, "sub_episode_number.pkl")):
             saved_sub_episode_number = load_object("sub_episode_number", Result_Path)
         if self.is_Resumption and os.path.exists(os.path.join(Result_Path, "episode_number.pkl")):
             saved_episode_number = load_object("episode_number", Result_Path)
-        print(methode_name)
-        callbacks_lists, model_info_paths, model_names = self.Create_Agents(methode_name)
+        print(method_name)
+        callbacks_lists, model_info_paths, model_names = self.Create_Agents(method_name)
         Scenario_Type = "train"
         while step < Simulation_Time:
             traci.simulationStep()
             if episode_number>=TEST_STAGE:Scenario_Type = "test"
             if step == 0: self.Save_Start_State()
             if step % traffic_light_period == 0:
-                self.Communication_With_Environment(methode_name, step, callbacks_lists,
+                self.Communication_With_Environment(method_name, step, callbacks_lists,
                                                     model_info_paths, model_names, Scenario_Type,
                                                     saved_episode_number, episode_number, step_number)
                 step_number+=1
@@ -152,14 +152,31 @@ class Controller:
                 episode_number += 1
                 self.Rest_Sumo()
                 if episode_number%5==0 and episode_number!=0 and saved_episode_number<=episode_number:
+                    save_path_ = os.path.join(Result_Path, str(method_name)+' Results')
                     save_object(episode_number, "episode_number", Result_Path)
+                    save_object(episode_number, "episode_number", save_path_)
+
                     save_object(sub_episode_number, "sub_episode_number", Result_Path)
+                    save_object(sub_episode_number, "sub_episode_number", save_path_)
+
                     save_object(callbacks_lists, "callbacks_lists", Result_Path)
+                    save_object(callbacks_lists, "callbacks_lists", save_path_)
+
                     save_object(model_info_paths, "model_info_paths", Result_Path)
+                    save_object(model_info_paths, "model_info_paths", save_path_)
+
                     save_object(model_names, "model_names", Result_Path)
+                    save_object(model_names, "model_names", save_path_)
+
                     save_object(self.graph, "graph", Result_Path)
+                    save_object(self.graph, "graph", save_path_)
+
                     save_object(self.information, "information", Result_Path)
+                    save_object(self.information, "information", save_path_)
+
                     save_object(self.Agents, "Agents", Result_Path)
+                    save_object(self.Agents, "Agents", save_path_)
+
             step_generation += 1
             step += 1
-        self.results.Prepare_All_Results(methode_name)
+        self.results.Prepare_All_Results(method_name)
