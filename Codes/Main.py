@@ -28,25 +28,25 @@ class SUMO_ENV:
         sys.stdout.flush()
     def Random_Methode(self):
         controller = Controller(self.intersections, self.is_Resumption)
-        controller.Run(methode_name=Methods.Random)
+        controller.Run(method_name=Methods.Random)
     def Kalman_Methode_R1(self):
         controller = Controller(self.intersections, self.is_Resumption)
-        controller.Run(methode_name=Methods.Kalman_R1)
+        controller.Run(method_name=Methods.Kalman_R1)
     def Kalman_Methode_R2(self):
         controller = Controller(self.intersections, self.is_Resumption)
-        controller.Run(methode_name=Methods.Kalman_R2)
+        controller.Run(method_name=Methods.Kalman_R2)
     def Kalman_Methode_R3(self):
         controller = Controller(self.intersections, self.is_Resumption)
-        controller.Run(methode_name=Methods.Kalman_R3)
+        controller.Run(method_name=Methods.Kalman_R3)
     def Traditional_RL_Methode_R1(self):
         controller = Controller(self.intersections, self.is_Resumption)
-        controller.Run(methode_name=Methods.Traditional_R1)
+        controller.Run(method_name=Methods.Traditional_R1)
     def Traditional_RL_Methode_R2(self):
         controller = Controller(self.intersections, self.is_Resumption)
-        controller.Run(methode_name=Methods.Traditional_R2)
+        controller.Run(method_name=Methods.Traditional_R2)
     def Traditional_RL_Methode_R3(self):
         controller = Controller(self.intersections, self.is_Resumption)
-        controller.Run(methode_name=Methods.Traditional_R3)
+        controller.Run(method_name=Methods.Traditional_R3)
     def Default_Case(self):
         print("Error running method")
     def Run_Methodes(self):
