@@ -109,8 +109,8 @@ class Results:
             self.Results_visualization.Results_plot(junction_id, self.graph.results_history.density_history_per_episode[junction_id], "Density Per Episode", "Episode", "Density", str(methode_name)+' Results', 5)
 
     def Prepare_All_Results(self, methode_name):
-        if not methode_name is Methods.Random:
-            self.Kalman_Results(methode_name)
+        # if not methode_name is Methods.Random:
+        #     self.Kalman_Results(methode_name)
         self.graph.results_history.Save_Results_as_CSV(methode_name)
         self.graph.results_history.Make_Results_Per_episode(methode_name)
         self.RL_Results(methode_name)
