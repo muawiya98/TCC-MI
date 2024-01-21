@@ -30,6 +30,7 @@ class Controller:
         self.Agent_ids = intersection
         self.is_Resumption = is_Resumption
         if self.is_Resumption and os.path.exists(os.path.join(Result_Path, "graph.pkl")):
+            print("loaded graph ")
             self.graph = load_object("graph", Result_Path)
             self.information = load_object("information", Result_Path)
         else:
@@ -110,11 +111,16 @@ class Controller:
         Actions_dic = {}
         for i, Agent_id in enumerate(self.Agent_ids):
             if method_name is Methods.Random:
-                Actions_dic[Agent_id] = random.choice([1, 2, 3, 4, 5, 6])
-                self.reward.Reward_Function(Agent_id, step)
-                self.Save_Actions(Actions_dic[Agent_id], Agent_id)
+                if saved_episode_number <= episode_number:
+                    print(step, "start new actions ")
+                    Actions_dic[Agent_id] = random.choice([1, 2, 3, 4, 5, 6])
+                    self.reward.Reward_Function(Agent_id, step)
+                    self.Save_Actions(Actions_dic[Agent_id], Agent_id)
+                else:
+                    print(step, " old actions ")
+                    Actions_dic[Agent_id] = self.graph.results_history.action_per_step[Agent_id][step_number]
             else:
-                if saved_episode_number<=episode_number:
+                if saved_episode_number <= episode_number:
                     Actions_dic[Agent_id] = self.Agents[i].get_action(method_name, step, callbacks_lists[i],model_info_paths[i], model_names[i], Scenario_Type)
                     self.Save_Actions(Actions_dic[Agent_id], Agent_id)
                 else:
@@ -152,6 +158,7 @@ class Controller:
                 episode_number += 1
                 self.Rest_Sumo()
                 if episode_number%5==0 and episode_number!=0 and saved_episode_number<=episode_number:
+                    print(25* " save, ")
                     save_path_ = os.path.join(Result_Path, str(method_name)+' Results')
                     save_object(episode_number, "episode_number", Result_Path)
                     save_object(episode_number, "episode_number", save_path_)
@@ -159,7 +166,7 @@ class Controller:
                     save_object(sub_episode_number, "sub_episode_number", Result_Path)
                     save_object(sub_episode_number, "sub_episode_number", save_path_)
 
-                    save_object(callbacks_lists, "callbacks_lists", Result_Path)
+                    save_object(callbacks_lists, "callbacks_lists", Result_Path) #71550
                     save_object(callbacks_lists, "callbacks_lists", save_path_)
 
                     save_object(model_info_paths, "model_info_paths", Result_Path)

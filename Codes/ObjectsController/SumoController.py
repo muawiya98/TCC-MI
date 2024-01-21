@@ -1,7 +1,7 @@
 from Codes.ObjectsController.PedestriansController import PedestrianController
 from Codes.ObjectsController.VehiclesController import VehicleController
 
-class SumoObjectController(VehicleController,PedestrianController):
+class SumoObjectController(VehicleController, PedestrianController):
     
     def __init__(self,incomming_edges,outcomming_edges):
         VehicleController.__init__(self,incomming_edges,outcomming_edges)

@@ -16,7 +16,7 @@ class SUMO_ENV:
     def get_Options(self):
         opt_parser = optparse.OptionParser()
         opt_parser.add_option("--nogui", action="store_true",
-                            default=True, help="run the commandline version of sumo")
+                            default=False, help="run the commandline version of sumo")
         options, _ = opt_parser.parse_args()
         return options
     def Starting(self):
@@ -52,6 +52,7 @@ class SUMO_ENV:
     def Run_Methodes(self):
         os.makedirs(Result_Path, exist_ok=True)
         switch_dict = {
+
             Methods.Random: self.Random_Methode,
             Methods.Kalman_R1: self.Kalman_Methode_R1,
             Methods.Kalman_R2: self.Kalman_Methode_R2,
@@ -59,6 +60,7 @@ class SUMO_ENV:
             Methods.Traditional_R1: self.Traditional_RL_Methode_R1,
             Methods.Traditional_R2: self.Traditional_RL_Methode_R2,
             Methods.Traditional_R3: self.Traditional_RL_Methode_R3,
+
             }
         methode_list = list(switch_dict.keys())
         methode_name = methode_list[0]

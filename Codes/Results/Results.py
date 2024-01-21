@@ -96,17 +96,17 @@ class Results:
         os.makedirs(save_path, exist_ok=True)
         junction_ids = list(self.graph.results_history.accumulative_reward_history.keys())
         for junction_id in junction_ids:
-            self.Results_visualization.Results_plot(junction_id, self.graph.results_history.accumulative_reward_history[junction_id], "Accumulative Reward Per Step", "Step", "Accumulative Reward", str(methode_name)+' Results', 5)
-            self.Results_visualization.Results_plot(junction_id, self.graph.results_history.accumulative_reward_history_per_episode[junction_id], "Accumulative Reward Per Episode", "Episode", "Accumulative Reward", str(methode_name)+' Results', 5)
+            self.Results_visualization.Results_plot(junction_id, self.graph.results_history.accumulative_reward_history[junction_id], "Accumulative Reward Per Step", "Step", "Accumulative Reward", str(methode_name)+' Results', 50)
+            self.Results_visualization.Results_plot(junction_id, self.graph.results_history.accumulative_reward_history_per_episode[junction_id], "Accumulative Reward Per Episode", "Episode", "Accumulative Reward", str(methode_name)+' Results', 1)
 
-            self.Results_visualization.Results_plot(junction_id, self.graph.results_history.waiting_time_history[junction_id], "Waiting Time Per Step", "Step", "Waiting Time", str(methode_name)+' Results', 5)
-            self.Results_visualization.Results_plot(junction_id, self.graph.results_history.waiting_time_history_per_episode[junction_id], "Waiting Time Per Episode", "Episode", "Waiting Time", str(methode_name)+' Results', 5)
+            self.Results_visualization.Results_plot(junction_id, self.graph.results_history.waiting_time_history[junction_id], "Waiting Time Per Step", "Step", "Waiting Time", str(methode_name)+' Results', 50)
+            self.Results_visualization.Results_plot(junction_id, self.graph.results_history.waiting_time_history_per_episode[junction_id], "Waiting Time Per Episode", "Episode", "Waiting Time", str(methode_name)+' Results', 1)
 
-            self.Results_visualization.Results_plot(junction_id, self.graph.results_history.reward_history[junction_id], "Reward Per Step", "Step", "Reward", str(methode_name)+' Results', 5)
-            self.Results_visualization.Results_plot(junction_id, self.graph.results_history.reward_history_per_episode[junction_id], "Reward Per Episode", "Episode", "Reward", str(methode_name)+' Results', 5)
+            self.Results_visualization.Results_plot(junction_id, self.graph.results_history.reward_history[junction_id], "Reward Per Step", "Step", "Reward", str(methode_name)+' Results', 50)
+            self.Results_visualization.Results_plot(junction_id, self.graph.results_history.reward_history_per_episode[junction_id], "Reward Per Episode", "Episode", "Reward", str(methode_name)+' Results', 1)
 
-            self.Results_visualization.Results_plot(junction_id, self.graph.results_history.density_history[junction_id], "Density Per Step", "Step", "Density", str(methode_name)+' Results', 5)
-            self.Results_visualization.Results_plot(junction_id, self.graph.results_history.density_history_per_episode[junction_id], "Density Per Episode", "Episode", "Density", str(methode_name)+' Results', 5)
+            self.Results_visualization.Results_plot(junction_id, self.graph.results_history.density_history[junction_id], "Density Per Step", "Step", "Density", str(methode_name)+' Results', 50)
+            self.Results_visualization.Results_plot(junction_id, self.graph.results_history.density_history_per_episode[junction_id], "Density Per Episode", "Episode", "Density", str(methode_name)+' Results', 1)
 
     def Prepare_All_Results(self, methode_name):
         # if not methode_name is Methods.Random:
