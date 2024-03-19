@@ -4,7 +4,9 @@ from Codes.SumoGraph.ResultsHistory import ResultsHistory
 from Codes.SumoGraph.ModelsHistory import ModelsHistory
 from traci import edge, lane, trafficlight
 import numpy as np
+
 class FickleGraph:
+
     def __init__(self, Edge_lane, lane_state, Edge_Junction, all_edges,
                  Junction_Edge, Junction_controlledEdge):
         self.models_history = ModelsHistory(all_edges, Edge_lane, Edge_Junction, lane_state)
@@ -15,25 +17,17 @@ class FickleGraph:
         self.lane_state = lane_state
         self.Edge_lane = Edge_lane
         self.all_edges = all_edges
-        # self.accumulative_reward_history = {}
-        # self.waiting_time_history = {}
-        # self.action_history = {}
-        # self.reward_history = {}
         self.RL_State = {}
 
     def set_RL_State(self, RL_State, junction_id):
         self.RL_State[junction_id] = RL_State
+        
     def get_RL_State(self, junction_id):
         return self.RL_State[junction_id]
-    # def set_waiting_time_history(self, junction_id):
-    #     self.waiting_time_history[junction_id] = self.waiting_time_history[junction_id][1:]
-    # def Actions_Save(self, action, edges):
-    #     for i, edge in enumerate(edges):
-    #         if not edge in self.action_history:self.action_history[edge] = [action[i]]
-    #         else:self.action_history[edge].append(action[i])
+
     def get_state_base_action(self, action, junction_id, edges):
         programs = trafficlight.getAllProgramLogics(junction_id)
-        if action == Actions.N_S_open or action == Actions.E_W_open:
+        if action == Actions.N_S_open.value or action == Actions.E_W_open.value:
             phases1 = programs[2].phases
             if action == Actions.N_S_open:states = phases1[0].state
             else:states = phases1[2].state
@@ -54,6 +48,7 @@ class FickleGraph:
             except:edge_state = 0
             States.append(edge_state)
         return np.array(States)
+    
     def Claculate_Number_of_Vehicels_Outside_Lane(self, edge_id, number_of_vehicles):
         max_distance_from_the_signal = number_of_vehicles * (
                     Vehicle_characteristics['length'] + Vehicle_characteristics['min_cap'])

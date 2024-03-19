@@ -7,30 +7,33 @@ import pickle
 import math
 import os
 
-
-
 class Results:
+    
     def __init__(self, graph):
         self.graph = graph
         self.kalman_visualization = KalmanVisualization()
         self.Results_visualization = ResultsVisualization()
+    
     def Save_Object(self, obj, filename, path):
         filename = os.path.join(path,filename)
         with open(filename+".pkl", 'wb') as outp:
             pickle.dump(obj, outp, pickle.HIGHEST_PROTOCOL)
         outp.close()
+    
     def Load_Object(self, filename, path):
         filename = os.path.join(path,filename)
         with open(filename+".pkl", 'rb') as outp:
             loaded_object = pickle.load(outp)
         outp.close()
         return loaded_object
+    
     def calculate_rmse(self,y_true, y_pred):
         y_true, y_pred = np.array(y_true), np.array(y_pred)
         squared_errors = (y_true - y_pred) ** 2
         mean_squared_error = np.mean(squared_errors)
         rmse = math.sqrt(mean_squared_error)
         return rmse
+    
     def Kalman_Results(self, methode_name, methods_names = ['Ground Truth', 'Kalman Filter', 'Measurement',
                                                             'Smooth Kalman Filter', 'Particle Filter', 'Smooth Particle Filter']):
         save_path = os.path.join(Result_Path, str(methode_name)+' Results')
@@ -94,19 +97,12 @@ class Results:
     def RL_Results(self, methode_name):
         save_path = os.path.join(Result_Path, str(methode_name)+' Results')
         os.makedirs(save_path, exist_ok=True)
-        junction_ids = list(self.graph.results_history.accumulative_reward_history.keys())
+        junction_ids = list(self.graph.results_history.reward_history.keys())
         for junction_id in junction_ids:
-            self.Results_visualization.Results_plot(junction_id, self.graph.results_history.accumulative_reward_history[junction_id], "Accumulative Reward Per Step", "Step", "Accumulative Reward", str(methode_name)+' Results', 50)
-            self.Results_visualization.Results_plot(junction_id, self.graph.results_history.accumulative_reward_history_per_episode[junction_id], "Accumulative Reward Per Episode", "Episode", "Accumulative Reward", str(methode_name)+' Results', 1)
-
-            self.Results_visualization.Results_plot(junction_id, self.graph.results_history.waiting_time_history[junction_id], "Waiting Time Per Step", "Step", "Waiting Time", str(methode_name)+' Results', 50)
-            self.Results_visualization.Results_plot(junction_id, self.graph.results_history.waiting_time_history_per_episode[junction_id], "Waiting Time Per Episode", "Episode", "Waiting Time", str(methode_name)+' Results', 1)
-
-            self.Results_visualization.Results_plot(junction_id, self.graph.results_history.reward_history[junction_id], "Reward Per Step", "Step", "Reward", str(methode_name)+' Results', 50)
-            self.Results_visualization.Results_plot(junction_id, self.graph.results_history.reward_history_per_episode[junction_id], "Reward Per Episode", "Episode", "Reward", str(methode_name)+' Results', 1)
-
-            self.Results_visualization.Results_plot(junction_id, self.graph.results_history.density_history[junction_id], "Density Per Step", "Step", "Density", str(methode_name)+' Results', 50)
-            self.Results_visualization.Results_plot(junction_id, self.graph.results_history.density_history_per_episode[junction_id], "Density Per Episode", "Episode", "Density", str(methode_name)+' Results', 1)
+            self.Results_visualization.Results_plot(junction_id, self.graph.results_history.waiting_time_history_per_episode[junction_id], "AVG Waiting Time", "Episode", "AVG Waiting Time", str(methode_name)+' Results', 1)
+            self.Results_visualization.Results_plot(junction_id, self.graph.results_history.std_waiting_time_history_per_episode[junction_id], "STD Waiting Time", "Episode", "STD Waiting Time", str(methode_name)+' Results', 1)
+            self.Results_visualization.Results_plot(junction_id, self.graph.results_history.reward_history_per_episode[junction_id], "Reward", "Episode", "Reward", str(methode_name)+' Results', 1)
+            self.Results_visualization.Results_plot(junction_id, self.graph.results_history.density_history_per_episode[junction_id], "Density", "Episode", "Density", str(methode_name)+' Results', 1)
 
     def Prepare_All_Results(self, methode_name):
         # if not methode_name is Methods.Random:

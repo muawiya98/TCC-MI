@@ -23,13 +23,18 @@ class WaitingTime:
         return vehicles
 
     def Waiting_Time_Vehicles(self, edges_id):
-        waiting_time_vehicles = []
+        waiting_time_vehicles = [] 
         for id in edges_id:
+            w_t_v = []
             vehicles = edge.getLastStepVehicleIDs(id)
             if len(vehicles) > 0:
-                waiting_time_vehicles.append(max(list(map(lambda veh: vehicle.getWaitingTime(veh), vehicles))))
-            else:
-                waiting_time_vehicles.append(0)
+                for veh in vehicles:
+                    try:w_t_v.append(vehicle.getWaitingTime(veh))
+                    except:pass
+                w_t_v = list(filter(lambda x: x != 0, w_t_v))
+                if not len(w_t_v)>0:w_t_v=[0]
+                waiting_time_vehicles.append(np.average(w_t_v))
+            else:waiting_time_vehicles.append(0)
         return waiting_time_vehicles
 
     def Actual_Waiting(self, edges_id):
@@ -57,7 +62,7 @@ class WaitingTime:
             return std_dev_waiting_time
         return 0
 
-    def Reward_Info(self, edges_id=None):
+    def Reward_Info(self, edges_id):
         waiting_time_vehicles = self.Actual_Waiting(edges_id)
         std = self.Standard_Deviation_Waiting_Time_Vehicles(waiting_time_vehicles)
         avg = self.Average_Waiting_Time_Vehicles(waiting_time_vehicles)
