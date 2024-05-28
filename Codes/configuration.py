@@ -2,24 +2,24 @@ from enum import Enum
 import pickle
 import os
 
+import random
+import numpy as np
+
+random.seed(42)
+np.random.seed(42)
+
 root_path = '/content/drive/MyDrive/Colab_Notebooks/Muawiya/TCC_MI/TCC-MI/'
-
+# root_path = os.path.abspath(".")
+# 
 # ================= Simulation Settings =================
-# Network_Path = "Networks\\environment 3.3\\environment.sumocfg"
-# Network_Path = os.path.join(os.path.abspath("."), "Networks", "environment 3.3", "environment.sumocfg")
-# Network_Path = "Networks\\environment 2.2\\environment.sumocfg"
-# Network_Path = os.path.join(os.path.abspath("."), "Networks", "environment 2.2", "environment.sumocfg")
-# Network_Path = "Networks\\environment 1.1\\environment.sumocfg"
-
-# Network_Path = os.path.join(os.path.abspath("."), "Networks", "environment 1.1", "environment.sumocfg")
-Network_Path = os.path.join(root_path, "Networks", "environment 1.1", "environment.sumocfg")
+Network_Path = os.path.join(root_path, "Networks", "environment 1.1", "environment.sumocfg") # 2.2, 3.3
 
 # Result_Path = os.path.join(os.path.abspath("."), "Results")
 Result_Path = os.path.join(root_path, 'Results')
 
-Simulation_Time = 792000 # 720000 # 45000 # 144000 # 
+Simulation_Time = 9000 #13200 #26400 #396000# 792000
 
-TEST_STAGE = 80
+TEST_STAGE = 70
 
 # ================= Traffic Light Settings =================
 traffic_light_period = 30
@@ -27,9 +27,8 @@ traffic_light_period = 30
 Yellow_period = 5
 
 Green_red_period = 25
-
 # ================= Object Settings =================
-generation_period = 450 # 30 # 90 # 
+generation_period = 90 # 30 #450
 
 Vehicle_characteristics = {
     'length': 3,
@@ -41,14 +40,15 @@ HIGH_NUMBER_OF_VEHICLE = 18
 LOW_NUMBER_OF_VEHICLE = 3
 
 # ================= RL Settings =================
-episode_time = 7200 # 450 # 1440 # 
+episode_time = 90 # 120 # 480 #7200 # 450 # 1440 # 
 
-NUMBER_OF_ACTION = 6
+NUMBER_OF_ACTION = 2 # 6
 
 WINDOW_SIZE = 15
 
-
 Weighting_Factor = 0.6
+
+number_of_episode_for_save = 5
 
 # ================= Mathematical Models Settings =================
 particle_variance = 5
@@ -77,6 +77,7 @@ def save_object(obj, filename, path):
     with open(filename + ".pkl", 'wb') as outp:
         pickle.dump(obj, outp, pickle.HIGHEST_PROTOCOL)
     outp.close()
+
 def load_object(filename, path):
     filename = os.path.join(path, filename)
     with open(filename + ".pkl", 'rb') as outp:

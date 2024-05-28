@@ -1,21 +1,26 @@
-from Codes.configuration import episode_time, traffic_light_period, Result_Path
+from Codes.configuration import episode_time, traffic_light_period, Result_Path, load_object
 import pandas as pd
 import numpy as np
 import os
 
 class ResultsHistory:
 
-    def __init__(self):
-        self.action_history = {}
-        self.action_per_step = {}
+    def __init__(self, is_Resumption):
+        self.action_history = load_object("action_history", Result_Path) if is_Resumption and os.path.exists(os.path.join(Result_Path, "action_history.pkl")) else {}
+        self.action_per_step = load_object("action_per_step", Result_Path) if is_Resumption and os.path.exists(os.path.join(Result_Path, "action_per_step.pkl")) else {}
 
-        self.waiting_time_history_per_episode, self.waiting_time_history = {}, {}
-        self.std_waiting_time_history_per_episode, self.std_waiting_time_history = {}, {}
-        self.reward_history_per_episode, self.reward_history = {}, {}
-        
+        if not (is_Resumption and os.path.exists(os.path.join(Result_Path, "action_history.pkl"))):
+            self.waiting_time_history_per_episode, self.waiting_time_history = {}, {}
+            self.std_waiting_time_history_per_episode, self.std_waiting_time_history = {}, {}
+            self.reward_history_per_episode, self.reward_history = {}, {}
+            self.density_history_per_episode, self.density_history = {}, {}
+        else:
+            self.waiting_time_history_per_episode, self.waiting_time_history = load_object("waiting_time_history_per_episode", Result_Path), load_object("waiting_time_history", Result_Path)
+            self.std_waiting_time_history_per_episode, self.std_waiting_time_history = load_object("std_waiting_time_history_per_episode", Result_Path), load_object("std_waiting_time_history", Result_Path)
+            self.reward_history_per_episode, self.reward_history = load_object("reward_history_per_episode", Result_Path), load_object("reward_history", Result_Path)
+            self.density_history_per_episode, self.density_history = load_object("density_history_per_episode", Result_Path), load_object("density_history", Result_Path) 
         # self.action_history_per_episode = {}
-        self.density_history_per_episode, self.density_history = {}, {}
-
+        
     def Actions_Save(self, action, edges):
         for i, edge in enumerate(edges):
             if not edge in self.action_history:self.action_history[edge] = [action[i]]
@@ -51,5 +56,3 @@ class ResultsHistory:
             save_path = os.path.join(Result_Path, str(methode_name) + ' Results')
             os.makedirs(save_path, exist_ok=True)
             df.to_csv(os.path.join(save_path, "Numerical Results Per Step " + key + ".csv"), index=False)
-
-

@@ -33,7 +33,7 @@ class WaitingTime:
                     except:pass
                 w_t_v = list(filter(lambda x: x != 0, w_t_v))
                 if not len(w_t_v)>0:w_t_v=[0]
-                waiting_time_vehicles.append(np.average(w_t_v))
+                waiting_time_vehicles.append(np.max(w_t_v)) # average
             else:waiting_time_vehicles.append(0)
         return waiting_time_vehicles
 

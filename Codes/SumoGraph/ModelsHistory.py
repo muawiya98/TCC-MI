@@ -1,16 +1,18 @@
 from traci import lane, trafficlight
-
+from Codes.configuration import Result_Path, load_object
+import os
 class ModelsHistory:
-    def __init__(self, all_edges, Edge_lane, Edge_Junction, lane_state):
-        self.history = {key: [[], [], [], [], [], []] for key in all_edges}
-        self.operations = ['Ground_Truth_Save', 'Measurement_Save', 'Kalman_Save',
-                           'Soomth_Kalman_Save', 'ParticleFilter_Save', 'Soomth_ParticleFilter_Save']
-        self.edges_operations = {op:{key: {"Junction": None, "Update": False, "Add": False}
-                                     for key in all_edges} for op in  self.operations }
-        self.Edge_Information = {key: [0, 0, 0] for key in all_edges}
+    def __init__(self, all_edges, Edge_lane, Edge_Junction, lane_state, is_Resumption):
         self.Edge_lane = Edge_lane
         self.Edge_Junction = Edge_Junction
         self.lane_state = lane_state
+        self.operations = ['Ground_Truth_Save', 'Measurement_Save', 'Kalman_Save',
+                           'Soomth_Kalman_Save', 'ParticleFilter_Save', 'Soomth_ParticleFilter_Save']
+        self.history = load_object("history", Result_Path) if is_Resumption and os.path.exists(os.path.join(Result_Path, "history.pkl")) else {key: [[], [], [], [], [], []] for key in all_edges} #------
+
+        self.edges_operations = load_object("edges_operations", Result_Path) if is_Resumption and os.path.exists(os.path.join(Result_Path, "edges_operations.pkl")) else {op:{key: {"Junction": None, "Update": False, "Add": False}
+                                     for key in all_edges} for op in  self.operations } #-----------
+        self.Edge_Information = load_object("Edge_Information", Result_Path) if is_Resumption and os.path.exists(os.path.join(Result_Path, "Edge_Information.pkl")) else {key: [0, 0, 0] for key in all_edges} #--------
 
     def get_history(self):
         return self.history
